@@ -1,8 +1,9 @@
-using Plots
+using Plots, Noise
 using DifferentialEquations
 using DelimitedFiles
-pyplot()
+plotlyjs()
 
+noise_level = 0.05
 
 t = 9
 dts = .1
@@ -69,6 +70,10 @@ sol1 = DifferentialEquations.solve(mon1,SSPRK432(),saveat=1)
 sol2 = DifferentialEquations.solve(mon2,SSPRK432(),saveat=1)
 sol3 = DifferentialEquations.solve(mon3,SSPRK432(),saveat=1)
 sol4 = DifferentialEquations.solve(mon4,SSPRK432(),saveat=1)
+sol1 = add_gauss(sol1[:,2],noise_level)
+sol2 = add_gauss(sol2[:,2],noise_level)
+sol3 = add_gauss(sol3[:,2],noise_level)
+sol4 = add_gauss(sol4[:,2],noise_level)
 writedlm("m1.txt",[sol1.t sol1[1,:] sol1[2,:]])
 writedlm("m2.txt",[sol2.t sol2[1,:] sol2[2,:]])
 writedlm("m3.txt",[sol3.t sol3[1,:] sol3[2,:]])
@@ -96,31 +101,37 @@ pw24 = ODEProblem(lv2,u24,tspan,p24)
 pw34 = ODEProblem(lv2,u34,tspan,p34)
 
 sol12 = DifferentialEquations.solve(pw12,SSPRK432(),saveat=1)
+sol12 = add_gauss(sol12[:,2:3],noise_level)
 plot(sol12.t,sol12[1,:],grid=true,lw=3, label = "Bac1", title = "Pairwise")
 plot!(sol12.t,sol12[2,:], lw=3, label="Bac2")
 writedlm("p12.txt",[sol12.t sol12[1,:] sol12[2,:]])
 
 sol13 = DifferentialEquations.solve(pw13,SSPRK432(),saveat=1)
+sol13 = add_gauss(sol13[:,2:3],noise_level)
 plot(sol13.t,sol13[1,:],grid=true,lw=3, label = "Bac1", title = "Pairwise")
 plot!(sol13.t,sol13[2,:], lw=3, label="Bac3")
 writedlm("p13.txt",[sol13.t sol13[1,:] sol13[2,:]])
 
 sol14 = DifferentialEquations.solve(pw14,SSPRK432(),saveat=1)
+sol14 = add_gauss(sol14[:,2:3],noise_level)
 plot(sol14.t,sol14[1,:],grid=true,lw=3, label = "Bac1", title = "Pairwise")
 plot!(sol14.t,sol14[2,:], lw=3, label="Bac4")
 writedlm("p14.txt",[sol14.t sol14[1,:] sol14[2,:]])
 
 sol23 = DifferentialEquations.solve(pw23,SSPRK432(),saveat=1)
+sol23 = add_gauss(sol23[:,2:3],noise_level)
 plot(sol23.t,sol23[1,:],grid=true,lw=3, label = "Bac2", title = "Pairwise")
 plot!(sol23.t,sol23[2,:], lw=3, label="Bac3")
 writedlm("p23.txt",[sol23.t sol23[1,:] sol23[2,:]])
 
 sol24 = DifferentialEquations.solve(pw24,SSPRK432(),saveat=1)
+sol24 = add_gauss(sol24[:,2:3],noise_level)
 plot(sol24.t,sol24[1,:],grid=true,lw=3, label = "Bac2", title = "Pairwise")
 plot!(sol24.t,sol24[2,:], lw=3, label="Bac4")
 writedlm("p24.txt",[sol24.t sol24[1,:] sol24[2,:]])
 
 sol34 = DifferentialEquations.solve(pw34,SSPRK432(),saveat=1)
+sol34 = add_gauss(sol34[:,2:3],noise_level)
 plot(sol34.t,sol34[1,:],grid=true,lw=3, label = "Bac3", title = "Pairwise")
 plot!(sol34.t,sol34[2,:], lw=3, label="Bac4")
 writedlm("p34.txt",[sol34.t sol34[1,:] sol34[2,:]])
@@ -141,24 +152,28 @@ t134 = ODEProblem(lv3,u134,tspan,p134)
 t234 = ODEProblem(lv3,u234,tspan,p234)
 
 sol123 = DifferentialEquations.solve(t123,SSPRK432(),saveat=1)
+sol123 = add_gauss(sol123[:,2:4],noise_level)
 plot(sol123.t,sol123[1,:],grid=true,lw=3, label = "Bac1", title = "Triplicate")
 plot!(sol123.t,sol123[2,:], lw=3, label="Bac2")
 plot!(sol123.t,sol123[3,:], lw=3, label="Bac3")
 writedlm("t123.txt",[sol123.t sol123[1,:] sol123[2,:] sol123[3,:]])
 
 sol124 = DifferentialEquations.solve(t124,SSPRK432(),saveat=1)
+sol124 = add_gauss(sol124[:,2:4],noise_level)
 plot(sol124.t,sol124[1,:],grid=true,lw=3, label = "Bac1", title = "Triplicate")
 plot!(sol124.t,sol124[2,:], lw=3, label="Bac2")
 plot!(sol124.t,sol124[3,:], lw=3, label="Bac4")
 writedlm("t124.txt",[sol124.t sol124[1,:] sol124[2,:] sol124[3,:]])
 
 sol134 = DifferentialEquations.solve(t134,SSPRK432(),saveat=1)
+sol134 = add_gauss(sol134[:,2:4],noise_level)
 plot(sol134.t,sol134[1,:],grid=true,lw=3, label = "Bac1", title = "Triplicate")
 plot!(sol134.t,sol134[2,:], lw=3, label="Bac3")
 plot!(sol134.t,sol134[3,:], lw=3, label="Bac4")
 writedlm("t134.txt",[sol134.t sol134[1,:] sol134[2,:] sol134[3,:]])
 
 sol234 = DifferentialEquations.solve(t234,SSPRK432(),saveat=1)
+sol234 = add_gauss(sol234[:,2:4],noise_level)
 plot(sol234.t,sol234[1,:],grid=true,lw=3, label = "Bac2", title = "Triplicate")
 plot!(sol234.t,sol234[2,:], lw=3, label="Bac3")
 plot!(sol234.t,sol234[3,:], lw=3, label="Bac4")
@@ -176,6 +191,7 @@ end
 full = ODEProblem(lv4,u1234,tspan,p1234)
 
 sol1234 = DifferentialEquations.solve(full,SSPRK432(),saveat=1)
+sol1234 = add_gauss(sol1234[:,2:5],noise_level)
 plot(sol1234.t,sol1234[1,:],grid=true,lw=3, label = "Bac1", title = "Full")
 plot!(sol1234.t,sol1234[2,:], lw=3, label="Bac2")
 plot!(sol1234.t,sol1234[3,:], lw=3, label="Bac3")
